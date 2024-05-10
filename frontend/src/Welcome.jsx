@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import './Welcome.scss';
+import eyeOpen from '/eye-open.svg';
+import eyeClose from '/eye.svg';
 
 function Welcome() {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [activeButton, setActiveButton] = useState('signIn');
+    const [showPassword, setShowPassword] = useState(false);
 
     const submitForm = (e) => {
         e.preventDefault();
@@ -13,6 +16,10 @@ function Welcome() {
 
     const switchButton = (button) => {
         setActiveButton(button);
+    };
+
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -26,8 +33,8 @@ function Welcome() {
                     </div>
                     <div className="input-field">
                         <img src="/password.svg" alt="Password Icon" className="input-icon"/>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required className="password-box"/>
-                        <img src="/eye.svg" alt="Show Password Icon" className="show-password-icon" onClick={() => {}}/>
+                        <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required className="password-box"/>
+                        <img src={showPassword ? eyeOpen : eyeClose} alt="Show Password Icon" className="show-password-icon" onClick={toggleShowPassword}/>
                     </div>
                     <div className="buttons-container">
                         <button type="button" className={activeButton === 'signIn' ? 'active-button' : 'inactive-button'} onClick={() => switchButton('signIn')}>Войти</button>
