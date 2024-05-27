@@ -120,6 +120,19 @@
     margin-right: 10px;
 }
 
+.settings-button {
+    display: flex;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    filter: invert(48%) sepia(8%) saturate(1592%) hue-rotate(190deg) brightness(84%) contrast(87%);
+    margin-left: auto;
+
+    &:hover {
+        filter: brightness(0) invert(100%) hue-rotate(170deg) drop-shadow(0 0 5px rgba(0, 0, 0, 0.7));
+    }
+}
+
 
 .logout-button {
     align-items: center;

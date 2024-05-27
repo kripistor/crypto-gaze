@@ -2,8 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Welcome from './Welcome';
 import Home from './Home';
-import Overview from './components/Overview';
-import './App.css';
+import Settings from "./Settings.jsx";
 
 function App() {
     return (
@@ -11,9 +10,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Welcome/>}/>
-                    <Route path="/home/*" element={<Home/>}>
-                        <Route path="Overview" element={<Overview/>}/>
-                    </Route>
+                    <Route path="/home" element={<Home/>}/>
+                    <Route path="/settings" element={<Settings/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
