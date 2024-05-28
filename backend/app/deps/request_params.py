@@ -5,7 +5,7 @@ from fastapi import Depends, HTTPException, Query
 from sqlalchemy import UnaryExpression, asc, desc
 
 from app.db import Base
-from app.models.dormitory import Dormitory as Item
+from app.models.user import User as Item
 from app.schemas.request_params import RequestParams
 
 

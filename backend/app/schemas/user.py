@@ -1,15 +1,26 @@
-import uuid
+from typing import Optional, List
 
-from fastapi_users import schemas
+from pydantic import BaseModel, ConfigDict
 
-
-class UserRead(schemas.BaseUser[uuid.UUID]):
-    pass
+from app.models.user import User
 
 
-class UserCreate(schemas.BaseUserCreate):
-    pass
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
 
 
-class UserUpdate(schemas.BaseUserUpdate):
-    pass
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+
+
+class UserRead(UserCreate):
+    id: int
+    photo_url: Optional[str] = None
+
+
+class UserLogin(BaseModel):
+    email: str
+    password: str

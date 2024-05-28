@@ -21,42 +21,24 @@ def create_app():
     )
     setup_routers(app)
     setup_cors_middleware(app)
-    serve_static_app(app)
-
-    app.mount("/avatars", StaticFiles(directory="avatars"), name="avatars")
     return app
 
 
 def setup_routers(app: FastAPI) -> None:
     app.include_router(api_router, prefix=settings.API_PATH)
-
+    # The following operation needs to be at the end of this function
     use_route_names_as_operation_ids(app)
-
-
-def serve_static_app(app):
-    app.mount("/", StaticFiles(directory="static"), name="static")
-
-    @app.middleware("http")
-    async def _add_404_middleware(request: Request, call_next):
-        """Serves static assets on 404"""
-        response = await call_next(request)
-        path = request["path"]
-        if path.startswith(settings.API_PATH) or path.startswith("/docs"):
-            return response
-        if response.status_code == 404:
-            return FileResponse("static/index.html")
-        return response
 
 
 def setup_cors_middleware(app):
     if settings.BACKEND_CORS_ORIGINS:
         app.add_middleware(
             CORSMiddleware,
-            allow_origins=["http://localhost:3000", "http://localhost:8000"],
+            allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
             allow_credentials=True,
             allow_methods=["*"],
-            allow_headers=["*"],
-
+            expose_headers=["Content-Range", "Range"],
+            allow_headers=["Authorization", "Range", "Content-Range"],
         )
 
 

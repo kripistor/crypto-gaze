@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "webcourse-backend"
+name = "auth-service"
 version = "0.1.0"
 description = ""
 authors = []
@@ -23,7 +23,6 @@ sentry-sdk = { extras = ["fastapi"], version = "^1.26.0" }
 aioboto3 = "^11.2.0"
 bcrypt="^4.1.2"
 pydantic-settings = "^2.0.1"
-python-multipart = "^0.0.9"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

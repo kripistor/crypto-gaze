@@ -13,34 +13,11 @@ logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "todo-spo"
-
-    SENTRY_DSN: Optional[HttpUrl] = None
-
+    PROJECT_NAME: str = "Auth Service"
     API_PATH: str = "/api/v1"
-
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30 * 24 * 60  # 30 days
-
-    BACKEND_CORS_ORIGINS: List = []
-
-    # The following variables need to be defined in environment
-
-    TEST_DATABASE_URL: Optional[PostgresDsn] = None
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     DATABASE_URL: PostgresDsn
     ASYNC_DATABASE_URL: Optional[PostgresDsn] = None
-    AUTHJWT_SECRET_KEY: str
-
-    @field_validator("DATABASE_URL")
-    def build_test_database_url(cls, v: Optional[str], info: FieldValidationInfo):
-        """Overrides DATABASE_URL with TEST_DATABASE_URL in test environment."""
-        if pytest in sys.modules:
-            if v:
-                url: MultiHostUrl = info.data.get("TEST_DATABASE_URL")
-                if url:
-                    return str(url.scheme.replace("postgres://", "postgresql://"))
-                else:
-                    raise ValueError("TEST_DATABASE_URL is not set")
-        return v
 
     @field_validator("ASYNC_DATABASE_URL")
     def build_async_database_url(cls, v: Optional[str], info: FieldValidationInfo):
@@ -50,8 +27,7 @@ class Settings(BaseSettings):
         return url.replace("postgresql", "postgresql+asyncpg", 1)
 
     SECRET_KEY: str
-    CMC_API_KEY: str
-    CMC_BASE_URL: str
+    AUTHJWT_SECRET_KEY: str
     #  END: required environment variables
 
 
