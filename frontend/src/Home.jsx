@@ -4,17 +4,15 @@ import './Home.scss';
 import overviewIcon from '/OverviewIcon.svg';
 import walletsIcon from '/WalletsIcon.svg';
 import transictionsIcon from '/TransictionsIcon.svg';
-import exchangeIcon from '/ExchangeIcon.svg';
-import marketIcon from '/MarketIcon.svg';
 import notificationsIcon from '/NotificationsIcon.svg';
 import messagesIcon from '/MessagesIcon.svg';
 import logoutIcon from '/LogoutIcon.svg';
 import SettingsIcon from '/SettingsIcon.svg';
 import Overview from "./components/Overview.jsx";
 import Wallets from "./components/Wallets.jsx";
-import Transictions from "./components/Transictions.jsx";
-import Exchange from "./components/Exchange.jsx";
-import Market from "./components/Market.jsx";
+import Favorites from "./components/Favorites.jsx";
+import Top100 from "./components/Top100.jsx";
+import CryptoDetail from "./components/CryptoDetail.jsx";
 
 
 function Home() {
@@ -25,10 +23,10 @@ function Home() {
     const navigate = useNavigate();
 
     const overview = new URLSearchParams(location.search).has('Overview');
+    const favorites = new URLSearchParams(location.search).has('Favorites');
+    const top100 = new URLSearchParams(location.search).has('Top100');
     const wallets = new URLSearchParams(location.search).has('Wallets');
-    const transictions = new URLSearchParams(location.search).has('Transictions');
-    const exchange = new URLSearchParams(location.search).has('Exchange');
-    const market = new URLSearchParams(location.search).has('Market');
+    const id = new URLSearchParams(location.search).get('id');
 
     useEffect(() => {
         setActiveLink(location.pathname + location.search);
@@ -45,25 +43,20 @@ function Home() {
                             <img src={overviewIcon} alt="Overview Icon"/>
                             Overview
                         </Link>
+                        <Link to="/home?Favorites"
+                              className={`menu-link ${activeLink === "/home?Favorites" ? "active" : ""}`}>
+                            <img src={walletsIcon} alt="Favorites Icon"/>
+                            Favorites
+                        </Link>
+                        <Link to="/home?Top100"
+                              className={`menu-link ${activeLink === "/home?Top100" ? "active" : ""}`}>
+                            <img src={transictionsIcon} alt="Top100 Icon"/>
+                            Top 100
+                        </Link>
                         <Link to="/home?Wallets"
                               className={`menu-link ${activeLink === "/home?Wallets" ? "active" : ""}`}>
                             <img src={walletsIcon} alt="Wallets Icon"/>
                             Wallets
-                        </Link>
-                        <Link to="/home?Transictions"
-                              className={`menu-link ${activeLink === "/home?Transictions" ? "active" : ""}`}>
-                            <img src={transictionsIcon} alt="Transictions Icon"/>
-                            Transictions
-                        </Link>
-                        <Link to="/home?Exchange"
-                              className={`menu-link ${activeLink === "/home?Exchange" ? "active" : ""}`}>
-                            <img src={exchangeIcon} alt="Exchange Icon"/>
-                            Exchange
-                        </Link>
-                        <Link to="/home?Market"
-                              className={`menu-link ${activeLink === "/home?Market" ? "active" : ""}`}>
-                            <img src={marketIcon} alt="Market Icon"/>
-                            Market
                         </Link>
                     </nav>
                     <div className="profile-section">
@@ -99,10 +92,10 @@ function Home() {
                 </div>
                 <div className="content">
                     {overview && <Overview/>}
+                    {favorites && <Favorites/>}
+                    {top100 && <Top100/>}
                     {wallets && <Wallets/>}
-                    {transictions && <Transictions/>}
-                    {exchange && <Exchange/>}
-                    {market && <Market/>}
+                    {id && <CryptoDetail id={id}/>}
                 </div>
             </div>
         </div>

@@ -8,20 +8,21 @@
     background: radial-gradient(63.88% 129.61% at 25.55% 31.91%, #20135C 0%, #140739 92.82%);
     margin: 0;
     padding: 0;
+
+    .header{
+        display: flex;
+        background: #3BA0FF;
+    }
+
+    .body {
+        display: flex;
+        flex-grow: 1;
+        background: #f0f0f0;
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 }
 
 
 
-.header{
-    display: flex;
-    background: #3BA0FF;
-}
-
-.body {
-    display: flex;
-    flex-grow: 1;
-    background: #f0f0f0;
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-}
