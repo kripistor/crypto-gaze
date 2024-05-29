@@ -14,10 +14,9 @@ import Favorites from "./components/Favorites.jsx";
 import Top100 from "./components/Top100.jsx";
 import CryptoDetail from "./components/CryptoDetail.jsx";
 
-
 function Home() {
     const location = useLocation();
-    const [activeLink, setActiveLink] = useState(location.pathname);
+    const [activeLink, setActiveLink] = useState(location.pathname + location.search);
     const [messagesCount, setMessagesCount] = useState(0);
     const [notificationsCount, setNotificationsCount] = useState(1);
     const navigate = useNavigate();
