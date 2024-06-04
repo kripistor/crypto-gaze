@@ -7,6 +7,8 @@ function Top100() {
     const [top100Data, setTop100Data] = useState([]);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [dots, setDots] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchTop100Data = async () => {
@@ -38,6 +40,7 @@ function Top100() {
                 console.error("Error fetching top 100 data", error);
                 setError("Failed to fetch top 100 data. Please try again later.");
             }
+            setIsLoading(false);
         };
 
         fetchTop100Data();
@@ -51,12 +54,32 @@ function Top100() {
         navigate(`/home?id=${id}`);
     };
 
+    useEffect(() => {
+        let timer;
+        if (isLoading) {
+            timer = setInterval(() => {
+                setDots(prevDots => {
+                    if (prevDots.length < 3) {
+                        return prevDots + '.';
+                    } else {
+                        return '';
+                    }
+                });
+            }, 1000);
+        } else {
+            setDots('');
+        }
+
+        return () => clearInterval(timer);
+    }, [isLoading]);
+
     return (
         <div className='Top100-page'>
             <div className='header'>
                 Top 100 Cryptocurrencies
             </div>
             <div className='body'>
+                {isLoading ? <div className='loading'>Loading top 100 data{dots}</div> :
                 <div className='top100-list'>
                     {top100Data.map(currency => (
                         <div key={currency.id} className='currency-card' onClick={() => handleCardClick(currency.id)}>
@@ -80,7 +103,7 @@ function Top100() {
                             <button className='favorite-button' onClick={(e) => e.stopPropagation()}>Favorite</button>
                         </div>
                     ))}
-                </div>
+                </div>}
             </div>
         </div>
     );

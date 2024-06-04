@@ -4,8 +4,11 @@ import './Overview.scss';
 
 function Overview() {
     const [favoritesData, setFavoritesData] = useState([]);
-    const [top100Data, setTop100Data] = useState([]);
+    const [top10Data, setTop10Data] = useState([]);
     const [error, setError] = useState(null);
+    const [isLoadingFavorites, setIsLoadingFavorites] = useState(true);
+    const [isLoadingTop10, setIsLoadingTop10] = useState(true);
+    const [dots, setDots] = useState('');
 
     useEffect(() => {
         const fetchFavoritesData = async () => {
@@ -47,13 +50,14 @@ function Overview() {
                 console.error("Error fetching favorites data", error);
                 setError("Failed to fetch data. Please try again later.");
             }
+            setIsLoadingFavorites(false);
         };
 
-        const fetchTop100Data = async () => {
+        const fetchTop10Data = async () => {
             try {
                 const response = await axios.get(`/api/v1/cryptocurrency/listings/latest`, {
                     params: {
-                        limit: 100,
+                        limit: 10,
                     }
                 });
 
@@ -64,7 +68,7 @@ function Overview() {
                     }
                 });
 
-                const top100WithDetails = response.data.data.map(currency => {
+                const top10WithDetails = response.data.data.map(currency => {
                     const infoData = infoResponse.data.data[currency.id];
                     return {
                         ...currency,
@@ -73,16 +77,36 @@ function Overview() {
                     };
                 });
 
-                setTop100Data(top100WithDetails);
+                setTop10Data(top10WithDetails);
             } catch (error) {
-                console.error("Error fetching top 100 data", error);
-                setError("Failed to fetch top 100 data. Please try again later.");
+                console.error("Error fetching top 10 data", error);
+                setError("Failed to fetch top 10 data. Please try again later.");
             }
+            setIsLoadingTop10(false);
         };
 
         fetchFavoritesData();
-        fetchTop100Data();
+        fetchTop10Data();
     }, []);
+
+    useEffect(() => {
+        let timer;
+        if (isLoadingFavorites || isLoadingTop10) {
+            timer = setInterval(() => {
+                setDots(prevDots => {
+                    if (prevDots.length < 3) {
+                        return prevDots + '.';
+                    } else {
+                        return '';
+                    }
+                });
+            }, 1000);
+        } else {
+            setDots('');
+        }
+
+        return () => clearInterval(timer);
+    }, [isLoadingFavorites, isLoadingTop10]);
 
     if (error) {
         return <div className='Overview-page'>{error}</div>;
@@ -96,6 +120,7 @@ function Overview() {
             <div className="body">
                 <div className="favorites">
                     <h2>Favorites</h2>
+                    {isLoadingFavorites ? <div className="loading">Loading favorites{dots}</div> :
                     <div className="favorites-list">
                         {favoritesData.map(currency => (
                             <div key={currency.id} className="currency-card">
@@ -112,12 +137,13 @@ function Overview() {
                                 <img src={currency.chart} alt={`${currency.name} chart`} className={`currency-chart ${currency.priceChange >= 0 ? 'positive' : 'negative'}`} />
                             </div>
                         ))}
-                    </div>
+                    </div>}
                 </div>
-                <div className="top100">
-                    <h2>Top 100 Cryptocurrencies</h2>
-                    <div className="top100-list">
-                        {top100Data.map(currency => (
+                <div className="top10">
+                    <h2>Top 10 Cryptocurrencies</h2>
+                    {isLoadingTop10 ? <div className="loading">Loading top 10{dots}</div> :
+                    <div className="top10-list">
+                        {top10Data.map(currency => (
                             <div key={currency.id} className="currency-card">
                                 <div className="currency-header">
                                     <div className="currency-name">{currency.name}</div>
@@ -132,7 +158,7 @@ function Overview() {
                                 <img src={currency.chart} alt={`${currency.name} chart`} className={`currency-chart ${currency.quote.USD.percent_change_24h >= 0 ? 'positive' : 'negative'}`} />
                             </div>
                         ))}
-                    </div>
+                    </div>}
                 </div>
             </div>
         </div>

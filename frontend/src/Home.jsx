@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Suspense, lazy} from 'react';
 import {useLocation, Link, useNavigate} from 'react-router-dom';
 import './Home.scss';
 import overviewIcon from '/OverviewIcon.svg';
@@ -8,11 +8,11 @@ import notificationsIcon from '/NotificationsIcon.svg';
 import messagesIcon from '/MessagesIcon.svg';
 import logoutIcon from '/LogoutIcon.svg';
 import SettingsIcon from '/SettingsIcon.svg';
-import Overview from "./components/Overview.jsx";
-import Wallets from "./components/Wallets.jsx";
-import Favorites from "./components/Favorites.jsx";
-import Top100 from "./components/Top100.jsx";
-import CryptoDetail from "./components/CryptoDetail.jsx";
+const Overview = lazy(() => import('./components/Overview'));
+const Favorites = lazy(() => import('./components/Favorites'));
+const Top100 = lazy(() => import('./components/Top100'));
+const Wallets = lazy(() => import('./components/Wallets'));
+const CryptoDetail = lazy(() => import('./components/CryptoDetail'));
 
 function Home() {
     const location = useLocation();
@@ -90,11 +90,13 @@ function Home() {
                     </div>
                 </div>
                 <div className="content">
-                    {overview && <Overview/>}
-                    {favorites && <Favorites/>}
-                    {top100 && <Top100/>}
-                    {wallets && <Wallets/>}
-                    {id && <CryptoDetail id={id}/>}
+                    <Suspense fallback={<div>Loading...</div>}>
+                        {overview && <Overview />}
+                        {favorites && <Favorites />}
+                        {top100 && <Top100 />}
+                        {wallets && <Wallets />}
+                        {id && <CryptoDetail id={id} />}
+                    </Suspense>
                 </div>
             </div>
         </div>

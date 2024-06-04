@@ -7,6 +7,8 @@ function Favorites() {
     const [favoritesData, setFavoritesData] = useState([]);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [dots, setDots] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     const favorites = [
         {name: 'Bitcoin', id: '1'},
@@ -48,6 +50,7 @@ function Favorites() {
                 console.error("Error fetching data", error);
                 setError("Failed to fetch data. Please try again later.");
             }
+            setIsLoading(false);
         };
 
         fetchFavoritesData();
@@ -61,12 +64,32 @@ function Favorites() {
         navigate(`/home?id=${id}`);
     }
 
+    useEffect(() => {
+        let timer;
+        if (isLoading) {
+            timer = setInterval(() => {
+                setDots(prevDots => {
+                    if (prevDots.length < 3) {
+                        return prevDots + '.';
+                    } else {
+                        return '';
+                    }
+                });
+            }, 1000);
+        } else {
+            setDots('');
+        }
+
+        return () => clearInterval(timer);
+    }, [isLoading]);
+
     return (
         <div className='Favorites-page'>
             <div className='header'>
                 Favorites
             </div>
             <div className='body'>
+                {isLoading ? <div className='loading'>Loading favorites{dots}</div> :
                 <div className='favorites-list'>
                     {favoritesData.map((currency) =>
                         <div key={currency.id} className='currency-card' onClick={() => handleCardClick(currency.id)}>
@@ -93,7 +116,7 @@ function Favorites() {
                             <button className='unfavorite-button' onClick={(e) => e.stopPropagation()}>Unfavorite</button>
                         </div>
                     )}
-                </div>
+                </div>}
             </div>
         </div>
     );

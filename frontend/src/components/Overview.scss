@@ -20,11 +20,19 @@
         flex-direction: column;
         gap: 40px;
 
-        .favorites, .top100 {
+        .favorites, .top10 {
             display: flex;
             flex-direction: column;
             gap: 20px;
             margin-bottom: 40px;
+
+            .loading{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 1.5em;
+                color: #696287;
+            }
 
 
 
@@ -36,7 +44,7 @@
             }
 
 
-            .favorites-list, .top100-list {
+            .favorites-list, .top10-list {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 20px;

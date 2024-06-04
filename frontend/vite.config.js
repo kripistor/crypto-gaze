@@ -7,12 +7,12 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'https://sandbox-api.coinmarketcap.com',
-
+        //target: 'https://pro-api.coinmarketcap.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         headers: {
           'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c'
-
+          //'X-CMC_PRO_API_KEY': 'c777354f-6303-4628-8df8-bf8d78d8a083'
         }
       }
     }
